@@ -6,41 +6,41 @@ import xml.etree.ElementTree as ET
 
 class RecaculadorDeFresa:
 
-    def __init__(self, xmlPath, newDiameter):
+    def generateElementTree(self, xmlPath):
+        '''[EN] Creates an element tree by the argument "xmlPath" \n
+        [PT-BR] Gera a árvore de elementos por meio do argumento "xmlPath"'''
 
-        # Importa o arquivo XML e estabelece a árvore de elementos
         self.tree = ET.parse(xmlPath)
         self.root = self.tree.getroot()
 
-        self.newDiameter = float(newDiameter)
+    def getToolDiameter(self, path):
+        '''[EN] Call "generateElementTree" to get the tool diameter from the .xml \n
+        [PT-BR] Invoca "generateElementeTree" para retirar o diâmetro da fresa contido no .xml'''
 
-        RecaculadorDeFresa.identificarModificacao(self)
+        self.generateElementTree(path)
 
-    def identificarModificacao(self):
-        # Passo 1: IDENTIFICAR O DIÂMETRO ATUAL DA FRESA
         self.firstPattern = self.root.find("Patterns/Pattern")
         self.toolDiameter = float(self.firstPattern.get("ToolDiameter"))
 
-        if (self.newDiameter > self.toolDiameter):
-            input("""O tamanho de fresa inserido é maior do que a anterior. Esta aplicação somente deve ser utilizada para diminuir o diametro da fresa de um arquivo .xml original
+        return(self.toolDiameter)
 
-            Aperte ENTER para encerrar a aplicação.""")
-                       
-            exit()
+    def identifyViability(self, newDiameter):
+        '''[EN] Checks if the new diameter is smaller than the previous diameter. Return True or False \n
+        [PT-BR] Verifica se o novo diâmetro é menor que o diâmetro original do plano. Retorna True ou False'''
+
+        if (newDiameter > self.toolDiameter):
+            return False
         else:
-            self.manipular()
+            return True
 
-    def manipular(self):
-
-        self.firstPattern = self.root.find("Patterns/Pattern")
-        self.toolDiameter = float(self.firstPattern.get("ToolDiameter"))
+    def manipulate(self, calcDiameter, savePath):
 
         # Passo 2: TIRAR A DIFERENÇA ENTRE OS DIÂMETROS E DIVIDIR POR DOIS
-        compDiameter = (self.toolDiameter - self.newDiameter) / 2
+        compDiameter = (self.toolDiameter - calcDiameter) / 2
 
         # Passo 3: REESCREVER, NO DOCUMENTO, O NOVO VALOR DE FRESA
         for Pattern in self.root.iter("Pattern"):
-            Pattern.set("ToolDiameter", str(self.newDiameter))
+            Pattern.set("ToolDiameter", str(calcDiameter))
 
         # Passo 4: MODIFICAR A COORDENADA DOS PONTOS CONFORME NECESSÁRIO
         # Estabelece um laço de iteração que vasculha cada tag Lineament no documento
@@ -149,12 +149,12 @@ class RecaculadorDeFresa:
         self.root.insert(0, notaAlteracao)
 
         # Escreve um novo arquivo como output
-        self.tree.write("outputComMacro.xml")
+        self.tree.write(savePath)
 
 
 if __name__ == "__main__":
 
-    recalculador = RecaculadorDeFresa(
-        "./XML PARA TESTE/4124^PAINEL EDITAVEL^22641^MDP^BP^BRAN^15MM.XML", "10")
+    recalculador = RecaculadorDeFresa()
+    # recalculador = RecaculadorDeFresa("./XML PARA TESTE/4124^PAINEL EDITAVEL^22641^MDP^BP^BRAN^15MM.XML", "10")
         # Estrutura para se implementar:
         # Input, Espessura da Nova Fresa, Output 
