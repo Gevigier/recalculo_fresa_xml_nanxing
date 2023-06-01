@@ -4,16 +4,16 @@ from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
 from tkinter import messagebox
 
-from pathlib import Path    
+from pathlib import Path
 
-from recalculador_fresa import RecaculadorDeFresa
+from toolRecalculator import toolDiameterCompensator
 
-recalc = RecaculadorDeFresa()
+recalc = toolDiameterCompensator()
 
 class recalculator_interface:
 
     def __init__(self):
-        show_interface = self.interface()
+        show_interface = self.main_interface()
 
     def selectXML(self, *args):
         '''Seleciona o arquivo .xml do plano de corte e exibe a espessura atual da fresa'''
@@ -31,20 +31,23 @@ class recalculator_interface:
         try:
             newTool = float(self.newDiameter.get())
 
-            if recalc.identifyViability(newTool):
-                saveLocation = asksaveasfilename(initialfile = self.xmlName, initialdir = "./",title = "Selecione onde deseja salvar",filetypes = (("Arquivos .xml","*.xml"),("Todos os arquivos","*.*")))
+            match recalc.identifyViability(newTool):
+                case 'Valid':
+                    saveLocation = asksaveasfilename(initialfile = self.xmlName, initialdir = "./",title = "Selecione onde deseja salvar",filetypes = (("Arquivos .xml","*.xml"),("Todos os arquivos","*.*")))
 
-                recalc.manipulate(newTool, saveLocation)
-                show_message = 'CONCLUÍDO. O PLANO FOI AJUSTADO CORRETAMENTE'
-            else:
-                show_message = 'ERRO: A FRESA INSERIDA É MAIOR DO QUE A FRESA ATUAL DO PLANO!'
+                    recalc.manipulate(newTool, saveLocation)
+                    messagebox.showinfo(message='CONCLUÍDO. O PLANO FOI AJUSTADO CORRETAMENTE')
 
-            messagebox.showinfo(message=show_message)
+                case 'Invalid - Bigger Tool Diameter':
+                    messagebox.showinfo(message='ERRO: A FRESA INSERIDA É MAIOR DO QUE A FRESA ATUAL DO PLANO!')
+
+                case 'Invalid - Same Size':
+                    messagebox.showinfo(message='ERRO: O DIÂMETRO INSERIDO É O MESMO DO PLANO ATUAL')
         
         except ValueError:
             pass
 
-    def interface(self):
+    def main_interface(self):
         self.root = Tk()
         self.root.title("Compensador de Fresa - Nanxing")
 
