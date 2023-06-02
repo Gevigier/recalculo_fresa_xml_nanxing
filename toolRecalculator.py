@@ -9,9 +9,6 @@ from pathlib import PurePath
 
 class toolDiameterCompensator:
 
-    def ___init__():
-        pass
-
     def generateElementTree(self, xmlPath):
         '''[EN] Creates an element tree by the argument "xmlPath" \n
         [PT-BR] Gera a árvore de elementos por meio do argumento "xmlPath"'''
@@ -56,8 +53,8 @@ class toolDiameterCompensator:
         [PT-BR] Recebe o novo diâmetro de fresa e o local para salvar o arquivo. Retira a diferença entre as fresas e recalcula as coordenadas de todas as peças dentro do plano, para então salvar no local passado
         '''
 
-        saveFolder = Path(savePath).parent.absolute() 
-        finalSavePath = PurePath(saveFolder, 'FRESA_' + str(calcDiameter) + '_' + Path(savePath).name)
+        # saveFolder = Path(savePath).parent.absolute() 
+        # finalSavePath = PurePath(saveFolder, 'FRESA_' + str(calcDiameter) + '_' + Path(savePath).name)
 
         self.makeBackup(savePath)
 
@@ -147,6 +144,8 @@ class toolDiameterCompensator:
                             newTL_Y = float(tl_Y) + compDiameter
                         elif hashtag == "2#":
                             newTL_Y = float(tl_Y) - compDiameter
+
+                        newTL_X = float(tl_X) - compDiameter
                     
                 elif dol_sign == "2$":
                         if hashtag == "1#":
@@ -183,4 +182,5 @@ class toolDiameterCompensator:
 
         # [EN] Export the element tree to the save path
         # [PT-BR] Escreve um novo arquivo como output
-        self.tree.write(finalSavePath)
+        # self.tree.write(finalSavePath)
+        self.tree.write(savePath)
