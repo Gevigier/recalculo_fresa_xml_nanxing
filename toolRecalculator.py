@@ -9,6 +9,9 @@ from pathlib import PurePath
 
 class toolDiameterCompensator:
 
+    def ___init__():
+        pass
+
     def generateElementTree(self, xmlPath):
         '''[EN] Creates an element tree by the argument "xmlPath" \n
         [PT-BR] Gera a árvore de elementos por meio do argumento "xmlPath"'''
@@ -53,6 +56,9 @@ class toolDiameterCompensator:
         [PT-BR] Recebe o novo diâmetro de fresa e o local para salvar o arquivo. Retira a diferença entre as fresas e recalcula as coordenadas de todas as peças dentro do plano, para então salvar no local passado
         '''
 
+        saveFolder = Path(savePath).parent.absolute() 
+        finalSavePath = PurePath(saveFolder, 'FRESA_' + str(calcDiameter) + '_' + Path(savePath).name)
+
         self.makeBackup(savePath)
 
         # [EN] Gets the diference between the new diameter and the previous one
@@ -91,20 +97,17 @@ class toolDiameterCompensator:
 
                 # [EN] Compensates X and Y of each Point based on the index number (indexOrder)
                 # [PT-BR] Compensa as coordenadas X e Y de cada Point se baseando no Index (informação atribuída à indexOrder)
-                match indexOrder:
-                    case 1 | 5:
+
+                if indexOrder == 1 or indexOrder == 5:
                         New_X = xCoord + compDiameter
                         New_Y = yCoord + compDiameter
-
-                    case 2:
+                elif indexOrder == 2:
                         New_X = xCoord - compDiameter
                         New_Y = yCoord + compDiameter
-
-                    case 3:
+                elif indexOrder == 3:
                         New_X = xCoord - compDiameter
                         New_Y = yCoord - compDiameter
-
-                    case 4:
+                elif indexOrder == 4:
                         New_X = xCoord + compDiameter
                         New_Y = yCoord - compDiameter
 
@@ -131,8 +134,7 @@ class toolDiameterCompensator:
 
                 # [EN] Identifies which "$" point it's and change it, as necessary, observing the respective "#"
                 # [PT-BR] Verifica qual o ponto "$" e o modifica, conforme o necessário, observando qual o respectivo "#"
-                match(dol_sign):
-                    case "0$":
+                if dol_sign == '0$':
                         if hashtag == "1#":
                             newTL_X = float(tl_X) + compDiameter
                         elif hashtag == "2#":
@@ -140,15 +142,13 @@ class toolDiameterCompensator:
 
                         newTL_Y = float(tl_Y) - compDiameter
 
-                    case "1$":
+                elif dol_sign == '1$':
                         if hashtag == "1#":
                             newTL_Y = float(tl_Y) + compDiameter
                         elif hashtag == "2#":
                             newTL_Y = float(tl_Y) - compDiameter
-
-                        newTL_X = float(tl_X) - compDiameter
-
-                    case "2$":
+                    
+                elif dol_sign == "2$":
                         if hashtag == "1#":
                             newTL_X = float(tl_X) - compDiameter
                         elif hashtag == "2#":
@@ -156,13 +156,14 @@ class toolDiameterCompensator:
 
                         newTL_Y = float(tl_Y) + compDiameter
 
-                    case "3$":
+                elif dol_sign == '3$':
                         if hashtag == "1#":
                             newTL_Y = float(tl_Y) + compDiameter
                         elif hashtag == "2#":
                             newTL_Y = float(tl_Y) - compDiameter
 
                         newTL_X = float(tl_X) + compDiameter
+
 
                 # [EN] Restructures the point in a list
                 # [PT-BR] Reestrutura o ponto em list
@@ -182,4 +183,4 @@ class toolDiameterCompensator:
 
         # [EN] Export the element tree to the save path
         # [PT-BR] Escreve um novo arquivo como output
-        self.tree.write(savePath)
+        self.tree.write(finalSavePath)

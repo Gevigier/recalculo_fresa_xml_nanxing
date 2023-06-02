@@ -23,6 +23,7 @@ class recalculator_interface:
 
         try:
             self.toolDiameter.set(float(recalc.getToolDiameter(self.filename)))
+            self.selected_file.set('PLANO:')
             self.xml_path.set(str(self.filename))
         except:
             pass
@@ -31,18 +32,19 @@ class recalculator_interface:
         try:
             newTool = float(self.newDiameter.get())
 
-            match recalc.identifyViability(newTool):
-                case 'Valid':
+            viability = recalc.identifyViability(newTool)
+
+            if viability == 'Valid':
                     saveLocation = asksaveasfilename(initialfile = self.xmlName, initialdir = "./",title = "Selecione onde deseja salvar",filetypes = (("Arquivos .xml","*.xml"),("Todos os arquivos","*.*")))
 
                     recalc.manipulate(newTool, saveLocation)
                     messagebox.showinfo(message='CONCLUÍDO. O PLANO FOI AJUSTADO CORRETAMENTE')
 
-                case 'Invalid - Bigger Tool Diameter':
-                    messagebox.showinfo(message='ERRO: A FRESA INSERIDA É MAIOR DO QUE A FRESA ATUAL DO PLANO!')
+            elif viability == 'Invalid - Bigger Tool Diameter':
+                messagebox.showinfo(message='ERRO: A FRESA INSERIDA É MAIOR DO QUE A FRESA ATUAL DO PLANO!')
 
-                case 'Invalid - Same Size':
-                    messagebox.showinfo(message='ERRO: O DIÂMETRO INSERIDO É O MESMO DO PLANO ATUAL')
+            elif viability == 'Invalid - Same Size':
+                messagebox.showinfo(message='ERRO: O DIÂMETRO INSERIDO É O MESMO DO PLANO ATUAL')                  
         
         except ValueError:
             pass
@@ -80,9 +82,11 @@ class recalculator_interface:
 
         self.toolDiameter = StringVar()
         self.xml_path = StringVar()
+        self.selected_file = StringVar()
 
         ttk.Label(mainframe, textvariable=self.toolDiameter).grid(column=2, row=3, sticky=(W, E))
-        ttk.Label(lowerframe, textvariable=self.xml_path).grid(column=0, row=1, sticky=(W, E))
+        ttk.Label(lowerframe, textvariable=self.selected_file).grid(column=0, row=1, sticky=(W, E))
+        ttk.Label(lowerframe, textvariable=self.xml_path).grid(column=1, row=1, sticky=(W, E))
 
         # ENTRADAS
 
