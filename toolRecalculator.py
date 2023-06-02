@@ -3,6 +3,8 @@
 # |                       PARA CNC NANXING                          |
 # |                    (COMPENSADOR DE FRESA)                       |
 # |                                                                 |
+# |                      -= MANIPULADOR =-                          |
+# |                                                                 |
 # |                                 Autor: Marcos Gabriel Gevigier  |
 # |                                         github.com/Gevigier     |
 # |                                                                 |
@@ -17,7 +19,7 @@ from pathlib import Path
 from pathlib import PurePath
 
 class toolDiameterCompensator:
-    '''[EN] Class capable of acessing a cut layount in .xml and modifie it. Has functions that generates an element tree, test the viability of changing the tool diameter, creat a backup file and to change the cutting coordinates \n
+    '''[EN] Class capable of acessing a cut layout in .xml and modifie it. Has functions that generates an element tree, test the viability of changing the tool diameter, creat a backup file and to change the cutting coordinates \n
     [PT-BR] Classe capaz de acessar um arquivo de corte em .xml e modificá-lo. Possúi métodos para gerar uma árvore de elementos, testar a possbilidade de alteração de diâmetro de fresa, criar backup e altera as coordenadas de corte'''
 
     def generateElementTree(self, xmlPath):

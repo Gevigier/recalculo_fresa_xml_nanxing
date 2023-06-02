@@ -3,6 +3,8 @@
 # |                       PARA CNC NANXING                          |
 # |                    (COMPENSADOR DE FRESA)                       |
 # |                                                                 |
+# |                       -= INTERFACE =-                           |
+# |                                                                 |
 # |                                 Autor: Marcos Gabriel Gevigier  |
 # |                                         github.com/Gevigier     |
 # |                                                                 |
@@ -34,7 +36,8 @@ class recalculator_interface:
         show_interface = self.main_interface()
 
     def selectXML(self, *args):
-        '''Seleciona o arquivo .xml do plano de corte e exibe a espessura atual da fresa'''
+        '''[EN] Asks to select a cut layout in .xml and shows the tool diameter of the layout and the it's path \n
+        [PT-R] Solicita a selação de um arquivo .xml de plano de corte, exibe a espessura atual da fresa e seu caminho'''
 
         self.filename = askopenfilename()
         self.xmlName = Path(self.filename).name
@@ -47,6 +50,9 @@ class recalculator_interface:
             pass
     
     def recalculate(self, *args):
+        '''[EN] Verifies the viaility of changing the tool diamemter and, if positive, asks  a save path and execute the method responsible to modify the .xml \n
+        [PT-BR] Verifica a possibilidade de se trocar o tamanho da fresa e, caso positivo, solicita um local para salvar o arquivo e executa a função responsável por modificar o .xml'''
+
         try:
             newTool = float(self.newDiameter.get())
 
@@ -55,12 +61,14 @@ class recalculator_interface:
             if viability == 'Valid':
                     saveLocation = asksaveasfilename(initialfile = self.xmlName, initialdir = "./",title = "Selecione onde deseja salvar",filetypes = (("Arquivos .xml","*.xml"),("Todos os arquivos","*.*")))
 
-                    recalc.manipulate(newTool, saveLocation)
-                    messagebox.showinfo(message='CONCLUÍDO. O PLANO FOI AJUSTADO CORRETAMENTE')
+                    if saveLocation:
+                        recalc.manipulate(newTool, saveLocation)
+                        messagebox.showinfo(message='CONCLUÍDO. O PLANO FOI AJUSTADO CORRETAMENTE')
+                    else:
+                        messagebox.showinfo(message='ERRO: HOUVE UM ERRO DESCONHECIDO')
 
             elif viability == 'Invalid - Bigger Tool Diameter':
                 messagebox.showinfo(message='ERRO: A FRESA INSERIDA É MAIOR DO QUE A FRESA ATUAL DO PLANO!')
-
             elif viability == 'Invalid - Same Size':
                 messagebox.showinfo(message='ERRO: O DIÂMETRO INSERIDO É O MESMO DO PLANO ATUAL')                  
         
