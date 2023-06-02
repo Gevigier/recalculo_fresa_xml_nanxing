@@ -1,13 +1,24 @@
-# PROGRAMA RECALCULADOR DE CORTE -> COMPENSADOR DE FRESA
-# Autor: Marcos Gabriel Gevigier
+# |=================================================================|
+# |            PROGRAMA MANIPULADOR DE PLANO DE CORTE               |
+# |                       PARA CNC NANXING                          |
+# |                    (COMPENSADOR DE FRESA)                       |
+# |                                                                 |
+# |                                 Autor: Marcos Gabriel Gevigier  |
+# |                                         github.com/Gevigier     |
+# |                                                                 |
+# | VERSÃO: 0.3.3                                                   |
+# |=================================================================|
 
-# Manipulador/Interpretador XML disponível na biblioteca padrão
+
+# [EN] Libs:
+# [PT-BR] Bibliotecas:
 import xml.etree.ElementTree as ET
-
 from pathlib import Path
 from pathlib import PurePath
 
 class toolDiameterCompensator:
+    '''[EN] Class capable of acessing a cut layount in .xml and modifie it. Has functions that generates an element tree, test the viability of changing the tool diameter, creat a backup file and to change the cutting coordinates \n
+    [PT-BR] Classe capaz de acessar um arquivo de corte em .xml e modificá-lo. Possúi métodos para gerar uma árvore de elementos, testar a possbilidade de alteração de diâmetro de fresa, criar backup e altera as coordenadas de corte'''
 
     def generateElementTree(self, xmlPath):
         '''[EN] Creates an element tree by the argument "xmlPath" \n
@@ -52,9 +63,6 @@ class toolDiameterCompensator:
         '''[EN] Receives the new tool diameter and the save path. Gets the diference between both of diameters and recalculates the coordinates from all the pieces inside the layout, for then export the .xml into the save path \n
         [PT-BR] Recebe o novo diâmetro de fresa e o local para salvar o arquivo. Retira a diferença entre as fresas e recalcula as coordenadas de todas as peças dentro do plano, para então salvar no local passado
         '''
-
-        # saveFolder = Path(savePath).parent.absolute() 
-        # finalSavePath = PurePath(saveFolder, 'FRESA_' + str(calcDiameter) + '_' + Path(savePath).name)
 
         self.makeBackup(savePath)
 
@@ -182,5 +190,4 @@ class toolDiameterCompensator:
 
         # [EN] Export the element tree to the save path
         # [PT-BR] Escreve um novo arquivo como output
-        # self.tree.write(finalSavePath)
         self.tree.write(savePath)

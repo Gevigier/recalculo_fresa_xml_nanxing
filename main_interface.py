@@ -1,3 +1,17 @@
+# |=================================================================|
+# |            PROGRAMA MANIPULADOR DE PLANO DE CORTE               |
+# |                       PARA CNC NANXING                          |
+# |                    (COMPENSADOR DE FRESA)                       |
+# |                                                                 |
+# |                                 Autor: Marcos Gabriel Gevigier  |
+# |                                         github.com/Gevigier     |
+# |                                                                 |
+# | VERSÃO: 0.3.3                                                   |
+# |=================================================================|
+
+
+# [EN] Libs:
+# [PT-BR] Bibliotecas:
 from tkinter import *
 from tkinter import ttk
 from tkinter.filedialog import askopenfilename
@@ -6,6 +20,8 @@ from tkinter import messagebox
 
 from pathlib import Path
 
+# [EN] Other code:
+# [PT-BR] Outro código:
 from toolRecalculator import toolDiameterCompensator
 
 recalc = toolDiameterCompensator()
@@ -13,6 +29,8 @@ recalc = toolDiameterCompensator()
 class recalculator_interface:
 
     def __init__(self):
+        '''[EN] Inicialization \n
+        [PT-BR] Inicialização'''
         show_interface = self.main_interface()
 
     def selectXML(self, *args):
