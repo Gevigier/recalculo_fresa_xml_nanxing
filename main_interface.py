@@ -8,7 +8,7 @@
 # |                                 Autor: Marcos Gabriel Gevigier  |
 # |                                         github.com/Gevigier     |
 # |                                                                 |
-# | VERSÃO: 0.3.5                                                   |
+# | VERSÃO: 0.3.6                                                   |
 # |=================================================================|
 
 
@@ -24,7 +24,7 @@ from pathlib import Path
 
 # [EN] Other code:
 # [PT-BR] Outro código:
-from toolRecalculator import toolDiameterCompensator
+from recalculateTool import toolDiameterCompensator
 
 
 recalc = toolDiameterCompensator()
