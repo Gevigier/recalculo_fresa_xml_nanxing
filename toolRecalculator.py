@@ -8,7 +8,7 @@
 # |                                 Autor: Marcos Gabriel Gevigier  |
 # |                                         github.com/Gevigier     |
 # |                                                                 |
-# | VERSÃO: 0.3.3                                                   |
+# | VERSÃO: 0.3.5                                                   |
 # |=================================================================|
 
 
